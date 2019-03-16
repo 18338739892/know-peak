@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns = "http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>know-peak</artifactId>
+    <groupId>com.pkk</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.pkk</groupId>
+  <artifactId>dynamic-ds</artifactId>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-base</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-service</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-mybatis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-db</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-exception</artifactId>
+    </dependency>
+  </dependencies>
+
+
+</project>
