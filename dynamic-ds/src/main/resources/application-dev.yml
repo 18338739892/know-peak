@@ -17,6 +17,13 @@ spring:
       username: dev_user3306
       password: dev_user3306
 
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://118.25.123.16:8761/eureka
+    registry-fetch-interval-seconds: 5
+
 #rabbit:
 #  listener:
 #    prefetchCount: 100
