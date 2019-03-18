@@ -15,11 +15,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActivateDataSource {
 
-  /**
-   * specl的数据源名称
-   *
-   * @return
-   */
-  String spel() default "";
+    /**
+     * specl的数据源名称
+     *
+     * @return
+     */
+    String spel() default "";
 
 }

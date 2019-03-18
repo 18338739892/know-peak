@@ -13,7 +13,7 @@ spring:
     password: rabbit@admin
   datasource:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://101.37.64.127:3306/bi_manager?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      url: jdbc:mysql://118.25.123.16:3305/bynamic-ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
       username: dev_user3306
       password: dev_user3306
 
