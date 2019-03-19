@@ -17,4 +17,10 @@ public class DataSourceContants {
     public static final String DEFAULT_MAIN_DATASOURCE = "main_datasource";
 
 
+    /**
+     * 获取动态数据源策略的bean
+     */
+    public static final String DATASOURCEGETSTRATEGY = "dataSourceGetStrategy";
+
+
 }

@@ -9,6 +9,7 @@
   <version>1.0.0-SNAPSHOT</version>
   <modules>
     <module>dynamic-ds</module>
+      <module>dynamic-use</module>
   </modules>
   <packaging>pom</packaging>
 

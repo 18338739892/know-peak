@@ -1,6 +1,8 @@
 package com.pkk.database.aspect;
 
 import com.pkk.database.annotation.ActivateDataSource;
+import com.pkk.database.constants.DataSourceContants;
+import com.pkk.database.utils.DataSourceUtil;
 import com.pkk.database.utils.SpelParseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -45,8 +47,19 @@ public class DataSourceAspect {
 
         //获取数据源的key[解析参数]
         String dataSourceKey = this.getDynamicDataSourceName(args, method, activateDataSource);
+        if (StringUtils.isEmpty(dataSourceKey)) {
+            log.debug("数据源注解已经标识，但value为null[{}]", joinPoint.getSignature().getName());
+            return;
+        }
+
+        //如果是默认数据源不在切换
+        if (DataSourceContants.DEFAULT_MAIN_DATASOURCE.equals(dataSourceKey)) {
+            return;
+        }
 
 
+        //激活使用切换数据源
+        DataSourceUtil.activateDataSource(dataSourceKey);
     }
 
     /**
