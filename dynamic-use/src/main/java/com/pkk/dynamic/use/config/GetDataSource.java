@@ -30,7 +30,7 @@ public class GetDataSource extends DataSourceGetStrategy {
      * @version 1.0
      */
     @Override
-    protected DataSource getDataSource(String dataSourceKey) {
+    public DataSource getDataSource(String dataSourceKey) {
 
         com.pkk.dynamic.use.entity.DataSource entity = dataSourceService.selectDbInfoByDbName(dataSourceKey);
         if (null == entity) {
@@ -43,7 +43,7 @@ public class GetDataSource extends DataSourceGetStrategy {
             dataSource.setUsername(entity.getUsername());
             dataSource.setPassword(entity.getPassword());
             dataSource.setJdbcUrl(entity.getDbUrl());
-            dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
             dataSource.setLoginTimeout(1000 * 60);
             return dataSource;
         } catch (SQLException e) {
