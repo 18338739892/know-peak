@@ -16,6 +16,8 @@ public class DynamicDataSourceConfig {
 
     /**
      * 启动的时候加载数据库的配置
+     *
+     * @ConfigurationProperties("spring.datasource.hikari")在构建dataSource时会读取配置文件
      */
     @Bean
     @ConfigurationProperties("spring.datasource.hikari")
@@ -25,7 +27,8 @@ public class DynamicDataSourceConfig {
 
     /**
      * ，对同一个接口，可能会有几种不同的实现类，而默认只会采取其中一种的情况下 @Primary 的作用就出来了
-     *  启动时加载,将默认的数据源设置到数据源集合中【启动时只有一个默认的数据源】
+     * 启动时加载,将默认的数据源设置到数据源集合中【启动时只有一个默认的数据源】
+     *
      * @param dataSource
      * @return
      */

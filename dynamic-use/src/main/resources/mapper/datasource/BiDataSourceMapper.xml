@@ -25,7 +25,7 @@
         where db_name = #{dbName}
     </select>
     <select id="selectTableInfoByTable" resultType="java.lang.Object">
-    select *
+    select <include refid="Base_Column_List"></include>
     from `${tableName}`
   </select>
 
