@@ -1,6 +1,7 @@
 package com.pkk.dynamic.use.service;
 
 import com.pkk.dynamic.use.entity.DataSource;
+import com.pkk.dynamic.use.vo.DataSourceChangeReqVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +17,20 @@ import java.util.Date;
 public interface DataSourceService {
 
 
-    /**
-     * 查询数据源信息
-     *
-     * @param dbName
-     * @return
-     */
-    DataSource selectDbInfoByDbName(String dbName);
+  /**
+   * 查询数据源信息
+   *
+   * @param dbName
+   * @return
+   */
+  DataSource selectDbInfoByDbName(String dbName);
 
 
+  /**
+   * 切换数据源
+   *
+   * @param dataSourceChangeReqVo
+   * @return
+   */
+  Object selectDbInfoByChangeDbName(DataSourceChangeReqVo dataSourceChangeReqVo);
 }

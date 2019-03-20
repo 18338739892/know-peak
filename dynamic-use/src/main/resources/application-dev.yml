@@ -13,9 +13,10 @@ spring:
     password: rabbit@admin
   datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://118.25.123.16:3305/bynamic-ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-      username: dev_user3306
-      password: dev_user3306
+      url: jdbc:mysql://118.25.123.16:3306/bynamic-ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      username: root
+      password: admin
+      type: com.zaxxer.hikari.HikariDataSource
 
 
 eureka:
@@ -35,7 +36,7 @@ eureka:
 
 #logging
 logging:
-  level.com.zhiyi: debug
+  level.com.pkk: debug
   level.java.sql.Connection: debug
   level.java.sql.Statement: debug
   level.java.sql.PreparedStatement: debug

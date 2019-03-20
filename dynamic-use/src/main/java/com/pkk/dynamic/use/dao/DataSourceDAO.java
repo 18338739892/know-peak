@@ -14,4 +14,12 @@ public interface DataSourceDAO {
      */
     DataSource selectDbInfoByDbName(String dbName);
 
+    /**
+     * @Description: 查询数据信息依据表名
+     * @Param: [tableName]
+     * @return: com.pkk.dynamic.use.entity.DataSource
+     * @Author: peikunkun
+     * @Date: 2019/3/20 0020 下午 4:37
+     */
+    Object selectTableInfoByTable(String tableName);
 }

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 /**
  * 获取数据源
  */
-public class GetDataSource extends DataSourceGetStrategy {
+public class GetDataSource/* extends DataSourceGetStrategy*/ {
 
     /**
      * <p>Title: getDataSource<／p>
@@ -20,7 +20,7 @@ public class GetDataSource extends DataSourceGetStrategy {
      * @date 2019/3/19 0019
      * @version 1.0
      */
-    @Override
+//    @Override
     public DataSource getDataSource(String dataSourceKey) {
 
 
