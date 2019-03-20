@@ -13,6 +13,10 @@ public class DataSourceSet {
 
     /**
      * 当前数据源的全局
+     * ThreadLocal,叫线程本地变量或线程本地存储。
+     * ThreadLocal为变量在每个线程中都创建了一个副本，那么每个线程可以访问自己内部的副本变量。
+     * 这里使用它的子类InheritableThreadLocal用来保证父子线程都能拿到值。
+     * new InheritableThreadLocal<String>();
      */
     private static final ThreadLocal<String> contextHolder = new ThreadLocal();
 

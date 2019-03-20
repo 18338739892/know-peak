@@ -7,6 +7,7 @@ import com.pkk.database.utils.SpelParseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -38,15 +39,8 @@ public class DataSourceAspect {
      */
     @Before("@annotation(activateDataSource)")
     public void activateDataSource(JoinPoint joinPoint, ActivateDataSource activateDataSource) {
-        //获取连接点的方法签名对象；
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        //获取连接点的方法
-        Method method = signature.getMethod();
-        //获取参数
-        Object[] args = joinPoint.getArgs();
-
         //获取数据源的key[解析参数]
-        String dataSourceKey = this.getDynamicDataSourceName(args, method, activateDataSource);
+        String dataSourceKey = this.getDynamicDataSourceName(joinPoint, activateDataSource);
         if (StringUtils.isEmpty(dataSourceKey)) {
             log.debug("数据源注解已经标识，但value为null[{}]", joinPoint.getSignature().getName());
             return;
@@ -62,6 +56,25 @@ public class DataSourceAspect {
         DataSourceUtil.activateDataSource(dataSourceKey);
     }
 
+
+    @After("@annotation(ads)")
+    public void resetDataSource(JoinPoint point, ActivateDataSource ads) {
+        //获取数据源的key[解析参数]
+        String dataSourceKey = this.getDynamicDataSourceName(point, ads);
+        if (StringUtils.isEmpty(dataSourceKey)) {
+            log.debug("数据源注解已经标识，但value为null[{}]", point.getSignature().getName());
+            return;
+        }
+
+        //默认的数据源
+        if (dataSourceKey.equals(DataSourceContants.DEFAULT_MAIN_DATASOURCE)) {
+            return;
+        }
+
+        log.debug("method：{} resetDataSource ", point.getSignature().getName());
+        DataSourceUtil.resetDataSource(dataSourceKey);
+    }
+
     /**
      * <p>Title: getDynamicDataSourceName<／p>
      * <p>Description: 获取数据源的key解析参数<／p>
@@ -71,10 +84,24 @@ public class DataSourceAspect {
      * @date 2019/3/18 0018
      * @version 1.0
      */
-    private String getDynamicDataSourceName(Object[] args, Method method, ActivateDataSource activateDataSource) {
-        if (StringUtils.isEmpty(activateDataSource.spel())) {
-            log.info("place specified datasource spel value");
+    private String getDynamicDataSourceName(JoinPoint joinPoint, ActivateDataSource activateDataSource) {
+        //获取连接点的方法签名对象；
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        //获取连接点的方法
+        Method method = signature.getMethod();
+        //获取参数
+        Object[] args = joinPoint.getArgs();
+
+        if (StringUtils.isBlank(activateDataSource.spel()) && StringUtils.isBlank(activateDataSource.value())) {
+            log.info("place specified datasource spel or value");
             return null;
+        }
+
+        /**
+         *如果指定了value就以value为准
+         */
+        if (StringUtils.isNotBlank(activateDataSource.value())) {
+            return activateDataSource.value();
         }
 
         //获取被拦截方法参数名列表(使用Spring支持类库)

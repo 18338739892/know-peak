@@ -20,7 +20,11 @@ public class DataSource implements Serializable {
 
     private String sourceName;
 
-    private String dbUrl;
+    private String dbPort;
+
+    private String dbIp;
+
+    private String parameters;
 
     private String username;
 
@@ -33,5 +37,4 @@ public class DataSource implements Serializable {
     private Date createTime;
 
     private Date delTime;
-
 }

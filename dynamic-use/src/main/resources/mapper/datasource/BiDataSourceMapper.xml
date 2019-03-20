@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace = "com.pkk.dynamic.use.dao.DataSourceDAO">
-  <resultMap id = "BaseResultMap" type = "com.pkk.dynamic.use.entity.DataSource">
-    <result column = "id" jdbcType = "BIGINT" property = "id" />
-    <result column = "source_name" jdbcType = "VARCHAR" property = "sourceName" />
-    <result column = "db_url" jdbcType = "VARCHAR" property = "dbUrl" />
-    <result column = "username" jdbcType = "VARCHAR" property = "username" />
-    <result column = "password" jdbcType = "VARCHAR" property = "password" />
-    <result column = "db_name" jdbcType = "VARCHAR" property = "dbName" />
-    <result column = "del_flag" jdbcType = "BIT" property = "delFlag" />
-    <result column = "create_time" jdbcType = "TIMESTAMP" property = "createTime" />
-    <result column = "del_time" jdbcType = "TIMESTAMP" property = "delTime" />
-  </resultMap>
-  <sql id = "Base_Column_List">
-    id, source_name, db_url, username, password, db_name, del_flag, create_time, del_time
+<mapper namespace="com.pkk.dynamic.use.dao.DataSourceDAO">
+    <resultMap id="BaseResultMap" type="com.pkk.dynamic.use.entity.DataSource">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="source_name" jdbcType="VARCHAR" property="sourceName"/>
+        <result column="db_port" jdbcType="VARCHAR" property="dbPort"/>
+        <result column="db_ip" jdbcType="VARCHAR" property="dbIp"/>
+        <result column="parameters" jdbcType="VARCHAR" property="parameters"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="db_name" jdbcType="VARCHAR" property="dbName"/>
+        <result column="del_flag" jdbcType="BIT" property="delFlag"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="del_time" jdbcType="TIMESTAMP" property="delTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, source_name, db_port,db_ip,parameters, username, password, db_name, del_flag, create_time, del_time
   </sql>
 
-  <select id = "selectDbInfoByDbName" resultMap = "BaseResultMap">
-    select
-    <include refid = "Base_Column_List" />
-    from bi_data_source
-    where db_name = #{dbName}
-  </select>
-  <select id = "selectTableInfoByTable" resultType = "java.lang.Object">
+    <select id="selectDbInfoByDbName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bi_data_source
+        where db_name = #{dbName}
+    </select>
+    <select id="selectTableInfoByTable" resultType="java.lang.Object">
     select *
     from `${tableName}`
   </select>

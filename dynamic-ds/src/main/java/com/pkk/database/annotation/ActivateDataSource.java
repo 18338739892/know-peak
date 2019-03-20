@@ -15,6 +15,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActivateDataSource {
 
+
+    /**
+     * 可以直接指定使用那个数据源
+     *
+     * @return
+     */
+    String value() default "";
+
     /**
      * specl的数据源名称
      *

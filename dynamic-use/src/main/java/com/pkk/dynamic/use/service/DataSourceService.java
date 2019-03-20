@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -32,5 +33,5 @@ public interface DataSourceService {
    * @param dataSourceChangeReqVo
    * @return
    */
-  Object selectDbInfoByChangeDbName(DataSourceChangeReqVo dataSourceChangeReqVo);
+  List<Object> selectDbInfoByChangeDbName(DataSourceChangeReqVo dataSourceChangeReqVo);
 }

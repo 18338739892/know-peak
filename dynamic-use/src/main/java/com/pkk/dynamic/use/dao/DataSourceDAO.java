@@ -2,6 +2,9 @@ package com.pkk.dynamic.use.dao;
 
 import com.pkk.dynamic.use.entity.DataSource;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface DataSourceDAO {
@@ -21,5 +24,5 @@ public interface DataSourceDAO {
      * @Author: peikunkun
      * @Date: 2019/3/20 0020 下午 4:37
      */
-    Object selectTableInfoByTable(String tableName);
+    List<Object> selectTableInfoByTable(@Param("tableName") String tableName);
 }

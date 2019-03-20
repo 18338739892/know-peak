@@ -12,11 +12,14 @@ spring:
     username: rabbit
     password: rabbit@admin
   datasource:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://118.25.123.16:3306/bynamic-ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    hikari:
+      jdbc-url: jdbc:mysql://118.25.123.16:3306/dynamic-ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
       username: root
       password: admin
-      type: com.zaxxer.hikari.HikariDataSource
+      connection-timeout: 60000
+      connection-test-query: select 1
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
 
 
 eureka:

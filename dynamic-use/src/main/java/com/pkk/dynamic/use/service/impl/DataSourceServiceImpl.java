@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class DataSourceServiceImpl implements DataSourceService {
@@ -35,7 +37,7 @@ public class DataSourceServiceImpl implements DataSourceService {
    */
   @Override
   @ActivateDataSource(spel = "#dataSourceChangeReqVo.dbName")
-  public Object selectDbInfoByChangeDbName(DataSourceChangeReqVo dataSourceChangeReqVo) {
+  public List<Object> selectDbInfoByChangeDbName(DataSourceChangeReqVo dataSourceChangeReqVo) {
     return dataSourceDAO.selectTableInfoByTable(dataSourceChangeReqVo.getTableName());
   }
 }
