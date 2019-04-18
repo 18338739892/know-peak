@@ -13,4 +13,24 @@
   <artifactId>peak-rabbitmq</artifactId>
   <description>rabbitmq的实现</description>
 
+
+  <dependencies>
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-web</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-util</artifactId>
+    </dependency>
+  </dependencies>
+
+
 </project>

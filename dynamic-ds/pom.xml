@@ -22,11 +22,6 @@
 
     <dependency>
       <groupId>com.pkk</groupId>
-      <artifactId>components-base</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.pkk</groupId>
       <artifactId>components-service</artifactId>
     </dependency>
 
