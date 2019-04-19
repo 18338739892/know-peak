@@ -6,7 +6,6 @@ import com.pkk.peakrabbitmq.constand.TopicExchangeConstand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * @description: rabbit消息处理业务类
