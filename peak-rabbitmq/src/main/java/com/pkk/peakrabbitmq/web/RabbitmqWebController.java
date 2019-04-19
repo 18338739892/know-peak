@@ -31,13 +31,16 @@ public class RabbitmqWebController {
    * @Date: 2019/4/19 0019 下午 3:50
    */
   @RequestMapping("send")
-  public Object send(String q, String obg) {
+  public Object send(String e, String q, String obg) {
     if (StringUtils.isBlank(q)) {
       q = TopicExchangeConstand.TOPIC_NAME_MASTER;
     }
+    if (StringUtils.isBlank(e)) {
+      e = TopicExchangeConstand.TOPIC_NAME_MASTER;
+    }
     JSONObject jsonObject = new JSONObject();
     jsonObject.put("msg", JSONObject.toJSONString(obg));
-    final boolean b = rabbitProductBusinessService.sendMessage(q, jsonObject);
+    final boolean b = rabbitProductBusinessService.sendMessage(e, q, jsonObject);
     if (b) {
       return "SUCCESS";
     }

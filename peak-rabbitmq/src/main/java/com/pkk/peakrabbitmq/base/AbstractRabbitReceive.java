@@ -25,13 +25,19 @@ public abstract class AbstractRabbitReceive {
   public void consumerHandle(@Payload Message message) {
     try {
       final JSONObject msg = JSONObject.parseObject(message.getMsg());
+      /**
+       * 消息处理之前
+       */
       JSONObject jsonObject = this.beforeHandle(msg);
-      System.out.println(jsonObject.get("body"));
+
       /**
        *消息处理
        */
       this.handleMessage(msg);
 
+      /**
+       * 消息处理之后
+       */
       this.afterHandle(msg);
     } catch (Exception e) {
       throw e;
