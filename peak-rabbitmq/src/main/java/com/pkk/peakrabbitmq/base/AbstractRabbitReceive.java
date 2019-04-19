@@ -22,16 +22,17 @@ public abstract class AbstractRabbitReceive {
    * @Date: 2019/4/19 0019 下午 5:17
    */
   @RabbitHandler
-  public void consumerHandle(@Payload String obj) {
+  public void consumerHandle(@Payload Message message) {
     try {
-      JSONObject jsonObject = this.beforeHandle(obj);
+      final JSONObject msg = JSONObject.parseObject(message.getMsg());
+      JSONObject jsonObject = this.beforeHandle(msg);
       System.out.println(jsonObject.get("body"));
       /**
        *消息处理
        */
-      this.handleMessage(obj);
+      this.handleMessage(msg);
 
-      this.afterHandle(obj);
+      this.afterHandle(msg);
     } catch (Exception e) {
       throw e;
     }

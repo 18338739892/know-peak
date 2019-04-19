@@ -1,6 +1,7 @@
 package com.pkk.peakrabbitmq.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pkk.peakrabbitmq.base.Message;
 import com.pkk.peakrabbitmq.constand.TopicExchangeConstand;
 import javax.annotation.Resource;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -25,9 +26,10 @@ public class RabbitMqProduct {
    * @Author: peikunkun
    * @Date: 2019/4/19 0019 下午 2:41
    */
-  public void send(String queueName, JSONObject message) {
+  public void send(String queueName, JSONObject msgJson) {
     CorrelationData correlationData = new CorrelationData(String.valueOf(System.currentTimeMillis()));
-    rabbitTemplate.convertAndSend(TopicExchangeConstand.TOPIC_NAME_MASTER, queueName, message.toJSONString(), correlationData);
+    final Message message = new Message(msgJson.toJSONString());
+    rabbitTemplate.convertAndSend(TopicExchangeConstand.TOPIC_NAME_MASTER, queueName, message, correlationData);
   }
 
 }

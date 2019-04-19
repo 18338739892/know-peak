@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author: peikunkun
  * @create: 2019-04-18 13:58
  **/
+@EnableRabbit
 @ComponentScan(basePackages = "com.pkk")
 @SpringBootApplication
 public class PeakRabbitMqApplication extends SpringBootServletInitializer {
