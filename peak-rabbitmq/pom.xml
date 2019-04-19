@@ -30,6 +30,12 @@
       <groupId>com.pkk</groupId>
       <artifactId>components-util</artifactId>
     </dependency>
+
+    <!--使用rabbitmq-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
   </dependencies>
 
 

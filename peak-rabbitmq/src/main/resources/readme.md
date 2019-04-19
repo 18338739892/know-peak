@@ -36,6 +36,46 @@
             `channel.basic_qos(prefetch_count=1) `,当然也可以在配置文件中配置
             
 12. 交换路由的几种类型
-    - Direct Exchange:直接匹配,通过Exchange名称+RountingKey来发送与接收消息.
-    - Fanout Exchange:广播订阅,向所有的消费者发布消息,但是只有消费者将队列绑定到该路由器才能收到消息,忽略Routing Key
-    - Topic Exchange：主题匹配订阅,这里的主题指的是RoutingKey,RoutingKey可以采用通配符,如:*或#，RoutingKey命名采用.来分隔多个词,只有消息这将队列绑定到该路由器且指定RoutingKey符合匹配规则时才能收到消息
+    - Direct Exchange:直接匹配,通过Exchange名称+RountingKey来发送与接收消息.【如果路由键完全匹配的话，消息才会被投放到相应的队列。】
+    - Fanout Exchange:广播订阅,向所有的消费者发布消息,但是只有消费者将队列绑定到该路由器才能收到消息,忽略Routing Key【当发送一条消息到fanout交换器上时，它会把消息投放到所有附加在此交换器上的队列。】
+    - Topic Exchange：主题匹配订阅,这里的主题指的是RoutingKey,RoutingKey可以采用通配符,如:*或#，RoutingKey命名采用.来分隔多个词,只有消息这将队列绑定到该路由器且指定RoutingKey符合匹配规则时才能收到消息【设置模糊的绑定方式，“*”操作符将“.”视为分隔符，匹配单个字符；“#”操作符没有分块的概念，它将任意“.”均视为关键字的匹配部分，能够匹配多个字符。】
+    
+13. [RabbitMq的五种队列模式](https://www.cnblogs.com/ysocean/p/9251884.html)
+    - 一个生产者对应一个消费者【生产者将消息发送到“hello”队列。消费者从该队列接收消息。】
+    - work 模式【一个生产者对应多个消费者，但是只能有一个消费者获得消息！！！】
+        - 消费者1和消费者2获取到的消息内容是不同的，也就是说同一个消息只能被一个消费者获取。
+        - 【channel.basicQos(1);】增加如上代码，表示同一时刻服务器只会发送一条消息给消费者。可以实现能者多劳,即让效率高的去消费更高的信息
+        - 效率高的消费者消费消息多。可以用来进行负载均衡。
+    - 发布/订阅模式【一个消费者将消息首先发送到交换器，交换器绑定到多个队列，然后被监听该队列的消费者所接收并消费。】
+        - 交换器，在RabbitMQ中，交换器主要有四种类型:direct、fanout、topic、headers
+        - 此模式用到的交换机是->fanout
+        - (就是一条消息发送到一个绑定着两个不同的队列的交换机上,交换机会把消息发送到这两个队列上)消费1和消费者2都消费了该消息,这是因为消费者1和消费者2都监听了被同一个交换器绑定的队列。如果消息发送到没有队列绑定的交换器时，消息将丢失，因为交换器没有存储消息的能力，消息只能存储在队列中。
+        - 应用场景:比如一个商城系统需要在管理员上传商品新的图片时，前台系统必须更新图片，日志系统必须记录相应的日志，那么就可以将两个队列绑定到图片上传交换器上，一个用于前台系统更新图片，另一个用于日志系统记录日志。
+    - 路由模式【生产者将消息发送到direct交换器，在绑定队列和交换器的时候有一个路由key，生产者发送的消息会指定一个路由key，那么消息只会发送到相应key相同的队列，接着监听该队列的消费者消费消息。】
+        - 此模式用到的交换机是->direct
+        - 应用场景:利用消费者能够有选择性的接收消息的特性，比如我们商城系统的后台管理系统对于商品进行修改、删除、新增操作都需要更新前台系统的界面展示，而查询操作确不需要，那么这两个队列分开接收消息就比较好。
+    - 主题模式【上面的路由模式是根据路由key进行完整的匹配（完全相等才发送消息），这里的通配符模式通俗的来讲就是模糊匹配。符号"#"表示匹配一个或多个词，符号"*"表示匹配一个词。】
+        - 此模式用到的交换机是->topic
+        - 生产者发送消息绑定的路由key为update.Name；消费者1监听的队列和交换器绑定路由key为update.#；消费者2监听的队列和交换器绑定路由key为select.#。很显然，消费者1会接收到消息，而消费者2接收不到。
+    - 其他说明
+        - 但是实际上只有三种，第一种简单队列，第二种工作模式，剩下的三种都是和交换器绑定的合起来称为一种，这小节我们就来详细介绍交换器。
+        - 前面三种分别对应路由模式、发布订阅模式和通配符模式，headers 交换器允许匹配 AMQP 消息的 header 而非路由键，除此之外，header 交换器和 direct 交换器完全一致，但是性能却差很多，因此基本上不会用到该交换器
+        
+[生产者与消费者](https://images2018.cnblogs.com/blog/1120165/201807/1120165-20180718210739808-323080287.png)
+    
+    
+    
+    
+14. 扩展知识
+    - @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE)这个是说在每次注入的时候回自动创建一个新的bean实例
+      @Scope(value=ConfigurableBeanFactory.SCOPE_SINGLETON)单例模式，在整个应用中只能创建一个实例
+      @Scope(value=WebApplicationContext.SCOPE_GLOBAL_SESSION)全局session中的一般不常用
+      @Scope(value=WebApplicationContext.SCOPE_APPLICATION)在一个web应用中只创建一个实例
+      @Scope(value=WebApplicationContext.SCOPE_REQUEST)在一个请求中创建一个实例
+      @Scope(value=WebApplicationContext.SCOPE_SESSION)每次创建一个会话中创建一个实例
+        - 里面还有个属性
+            proxyMode=ScopedProxyMode.INTERFACES创建一个JDK代理模式
+            proxyMode=ScopedProxyMode.TARGET_CLASS基于类的代理模式
+            proxyMode=ScopedProxyMode.NO（默认）不进行代理
+    
+    

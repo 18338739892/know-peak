@@ -1,0 +1,26 @@
+server:
+  undertow:
+    # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+    io-threads: 4
+    worker-threads: 20
+    direct-buffers: true
+    buffer-size: 1024
+  port: 8090
+
+spring:
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  application:
+    peak-rabbitmq
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: 118.25.123.16:8761
+    registry-fetch-interval-seconds: 10
+    fetch-registry: false
+    register-with-eureka: false
+
+
