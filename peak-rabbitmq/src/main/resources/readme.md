@@ -73,9 +73,23 @@
       @Scope(value=WebApplicationContext.SCOPE_APPLICATION)在一个web应用中只创建一个实例
       @Scope(value=WebApplicationContext.SCOPE_REQUEST)在一个请求中创建一个实例
       @Scope(value=WebApplicationContext.SCOPE_SESSION)每次创建一个会话中创建一个实例
+        - 这个是只有在用户访问系统时才会创建,也就是说,当Spring启动时容器中是没有的,这时候另一个类依赖此bean是不可以的,这是可以指定以下属性进行代理注入,带当前类是接口是可使用INTERFACES创建一个JDK代理模式,这是一个类时，可使用TARGET_CLASS基于类的代理模式
         - 里面还有个属性
             proxyMode=ScopedProxyMode.INTERFACES创建一个JDK代理模式
             proxyMode=ScopedProxyMode.TARGET_CLASS基于类的代理模式
             proxyMode=ScopedProxyMode.NO（默认）不进行代理
+
+15. [延迟队列的实现](https://github.com/mylxsw/growing-up/blob/master/doc/RabbitMQ%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E5%AE%9E%E6%88%98-%E5%AE%9E%E7%8E%B0%E5%BB%B6%E6%97%B6%E9%87%8D%E8%AF%95%E9%98%9F%E5%88%97.md)
+
+16. 定义队列时参数说明
+
+| 参数	|值	|说明
+|--- |  --- |  --- |
+| queue |	-	|队列名称|
+| passive|	false|	队列不存在则创建，存在则直接成功|
+| durable|	true|	队列持久化|
+| exclusive|	false|	排他，指定该选项为true则队列只对当前连接有效，连接断开后自动删除|
+| no-wait|	false|	该方法需要应答确认|
+| auto-delete|	false	|当不再使用时，是否自动删除|
     
     
