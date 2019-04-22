@@ -1,6 +1,8 @@
 package com.pkk.peakrabbitmq.web;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
+import com.pkk.peakrabbitmq.constand.PeakRabbitmqConstand;
 import com.pkk.peakrabbitmq.constand.TopicExchangeConstand;
 import com.pkk.peakrabbitmq.service.RabbitProductBusinessService;
 import javax.annotation.Resource;
@@ -25,22 +27,28 @@ public class RabbitmqWebController {
 
   /**
    * @Description: 发送队列消息
-   * @Param: [q, obg]
+   * @Param: [r, obg]
    * @return: java.lang.Object
    * @Author: peikunkun
    * @Date: 2019/4/19 0019 下午 3:50
    */
   @RequestMapping("send")
-  public Object send(String e, String q, String obg) {
-    if (StringUtils.isBlank(q)) {
-      q = TopicExchangeConstand.TOPIC_NAME_MASTER;
+  public Object send(String e, String r, String obg, Boolean error) {
+    if (StringUtils.isBlank(r)) {
+      r = TopicExchangeConstand.TOPIC_NAME_MASTER;
     }
     if (StringUtils.isBlank(e)) {
       e = TopicExchangeConstand.TOPIC_NAME_MASTER;
     }
+    if (null == error) {
+      error = false;
+    }
+    JSONObject message = new JSONObject();
+    message.put("obg", obg);
+    message.put(PeakRabbitmqConstand.ERROR_KEY, error);
     JSONObject jsonObject = new JSONObject();
-    jsonObject.put("msg", JSONObject.toJSONString(obg));
-    final boolean b = rabbitProductBusinessService.sendMessage(e, q, jsonObject);
+    jsonObject.put("msg", message);
+    final boolean b = rabbitProductBusinessService.sendMessage(e, r, jsonObject);
     if (b) {
       return "SUCCESS";
     }

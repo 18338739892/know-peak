@@ -25,10 +25,10 @@ public class RabbitMqProduct {
    * @Author: peikunkun
    * @Date: 2019/4/19 0019 下午 2:41
    */
-  public void send(String exchangeName, String queueName, JSONObject msgJson) {
+  public void send(String exchangeName, String routingKey, JSONObject msgJson) {
     CorrelationData correlationData = new CorrelationData(String.valueOf(System.currentTimeMillis()));
     final Message message = new Message(msgJson.toJSONString());
-    rabbitTemplate.convertAndSend(exchangeName, queueName, message, correlationData);
+    rabbitTemplate.convertAndSend(exchangeName, routingKey, message, correlationData);
   }
 
 }

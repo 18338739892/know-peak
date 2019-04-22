@@ -26,9 +26,9 @@ public class RabbitProductBusinessService {
    * @Author: peikunkun
    * @Date: 2019/4/19 0019 下午 3:36
    */
-  public boolean sendMessage(String exchangeName, String queueName, JSONObject message) {
+  public boolean sendMessage(String exchangeName, String routingKey, JSONObject message) {
     try {
-      rabbitMqProduct.send(exchangeName, queueName, message);
+      rabbitMqProduct.send(exchangeName, routingKey, message);
       return true;
     } catch (RuntimeException e) {
       return false;

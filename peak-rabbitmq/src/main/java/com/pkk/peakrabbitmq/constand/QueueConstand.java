@@ -18,4 +18,21 @@ public class QueueConstand {
   public static final String RETRY_SUFFER = "@retry";
 
 
+  /**
+   * 队列失败的队列
+   */
+  public static final String FAILED_QUEUE = TopicExchangeConstand.TOPIC_NAME_MASTER + FAILED_SUFFER;
+
+  /**
+   * 队列重试的队列
+   */
+  public static final String RETRY_QUEUE = TopicExchangeConstand.TOPIC_NAME_MASTER + RETRY_SUFFER;
+
+
+  /**
+   * master队列
+   */
+  public static final String MASTER_QUEUE = "master";
+
+
 }
