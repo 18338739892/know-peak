@@ -22,5 +22,9 @@ public class PeakRabbitmqConstand {
    * 信息
    */
   public static final String ERROR_OBJ = "obj";
+  /**
+   * 信息key
+   */
+  public static final String ERROR_OBJ_KEY = "msg";
 
 }

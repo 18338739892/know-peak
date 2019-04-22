@@ -66,7 +66,8 @@ public class RabbitReceiveBusinessService {
    * @Date: 2019/4/22 0022 下午 4:26
    */
   private static void error(JSONObject obj, Map<String, Object> headers) {
-    final boolean error = (Boolean) obj.getOrDefault(PeakRabbitmqConstand.ERROR_OBJ, false);
+    final boolean error = (Boolean) JSONObject.parseObject(obj.getString(PeakRabbitmqConstand.ERROR_OBJ_KEY))
+        .getJSONObject(PeakRabbitmqConstand.ERROR_OBJ_KEY).getOrDefault(PeakRabbitmqConstand.ERROR_KEY, false);
     final String exchange = (String) headers.getOrDefault("amqp_receivedExchange", "未知交换器");
     final String routing = (String) headers.getOrDefault("amqp_receivedRoutingKey", "未知路由");
     final String msg =

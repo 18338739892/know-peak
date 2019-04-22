@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Resource;
+import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -77,6 +78,11 @@ public class PeakRabbitMqConfig {
     SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
     factory.setConnectionFactory(connectionFactory);
     factory.setMessageConverter(messageConverter());
+    //手动确认模式
+    // 【AcknowledgeMode.NONE：自动确认
+    //AcknowledgeMode.AUTO：根据情况确认
+    //AcknowledgeMode.MANUAL：手动确认】
+    //factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
     return factory;
   }
 
@@ -118,10 +124,14 @@ public class PeakRabbitMqConfig {
     //队列绑定
     // 绑定监听队列到Exchange
     //[queue,exchange,routingKey]
-    channel.queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_NAME_MASTER, RoutingConstand.ROUTING_MASTER_ANY);
-    channel.queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_NAME_MASTER, RoutingConstand.ROUTING_MASTER);
-    channel.queueBind(QueueConstand.FAILED_QUEUE, TopicExchangeConstand.TOPIC_NAME_FAILED, RoutingConstand.ROUTING_MASTER);
-    channel.queueBind(QueueConstand.RETRY_QUEUE, TopicExchangeConstand.TOPIC_NAME_RETRY, RoutingConstand.ROUTING_MASTER);
+    channel.queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_NAME_MASTER,
+        RoutingConstand.ROUTING_MASTER_ANY);
+    channel
+        .queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_NAME_MASTER, RoutingConstand.ROUTING_MASTER);
+    channel
+        .queueBind(QueueConstand.FAILED_QUEUE, TopicExchangeConstand.TOPIC_NAME_FAILED, RoutingConstand.ROUTING_MASTER);
+    channel
+        .queueBind(QueueConstand.RETRY_QUEUE, TopicExchangeConstand.TOPIC_NAME_RETRY, RoutingConstand.ROUTING_MASTER);
     return channel;
   }
 }
