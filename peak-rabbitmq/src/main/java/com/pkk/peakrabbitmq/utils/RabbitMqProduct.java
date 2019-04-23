@@ -3,6 +3,7 @@ package com.pkk.peakrabbitmq.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.pkk.peakrabbitmq.base.Message;
 import javax.annotation.Resource;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.context.annotation.Configuration;

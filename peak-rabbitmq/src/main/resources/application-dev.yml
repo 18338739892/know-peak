@@ -4,3 +4,18 @@ spring:
     password: admin
     port: 5672
     host: 118.25.123.16
+
+
+
+ #配置生产者的配置，包括exchange,routingkey等
+java:
+  rabbitmq:
+    consumer:
+      service:
+        retry:
+          exchange: master.retry
+        fail:
+          exchange: master.failed
+        user:
+          retry:
+            routingkey: master

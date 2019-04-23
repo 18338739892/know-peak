@@ -5,6 +5,7 @@ import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_NAME_MAS
 import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_NAME_RETRY;
 
 import com.pkk.peakrabbitmq.constand.ExchangeConstand;
+import com.pkk.peakrabbitmq.constand.PeakRabbitmqConstand;
 import com.pkk.peakrabbitmq.constand.QueueConstand;
 import com.pkk.peakrabbitmq.constand.RoutingConstand;
 import com.pkk.peakrabbitmq.constand.TopicExchangeConstand;
@@ -82,7 +83,7 @@ public class PeakRabbitMqConfig {
     // 【AcknowledgeMode.NONE：自动确认
     //AcknowledgeMode.AUTO：根据情况确认
     //AcknowledgeMode.MANUAL：手动确认】
-    //factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+    factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
     return factory;
   }
 
@@ -116,9 +117,9 @@ public class PeakRabbitMqConfig {
      * 并且routing key指定为消费队列的名称，这样就可以实现消息只投递给原始出错时的队列，避免消息重新投递给所有关注当前routing key的消费者了。
      */
     Map<String, Object> retryArguments = new HashMap<String, Object>();
-    retryArguments.put("x-dead-letter-exchange", TOPIC_NAME_MASTER);
-    retryArguments.put("x-message-ttl", 30 * 1000);//重试时间30秒
-    retryArguments.put("x-dead-letter-routing-key", TOPIC_NAME_MASTER);
+    retryArguments.put(PeakRabbitmqConstand.DEAD_LETTER_EXCHANGE, TOPIC_NAME_MASTER);
+    retryArguments.put(PeakRabbitmqConstand.X_MESSAGE_TTL, 30 * 1000);//重试时间30秒
+    retryArguments.put(PeakRabbitmqConstand.DEAD_LETTER_ROUTING_KEY, TOPIC_NAME_MASTER);
     channel.queueDeclare(QueueConstand.RETRY_QUEUE, true, false, false, retryArguments);
 
     //队列绑定

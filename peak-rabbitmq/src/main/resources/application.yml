@@ -15,6 +15,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
   application:
     peak-rabbitmq
+
 eureka:
   client:
     serviceUrl:
