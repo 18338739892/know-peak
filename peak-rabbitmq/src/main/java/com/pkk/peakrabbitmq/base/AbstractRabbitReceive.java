@@ -5,7 +5,6 @@ import com.pkk.peakrabbitmq.constand.PeakRabbitmqConstand;
 import com.pkk.peakrabbitmq.constand.RoutingConstand;
 import com.pkk.peakrabbitmq.constand.TopicExchangeConstand;
 import com.pkk.peakrabbitmq.utils.RabbitMqUtil;
-import com.rabbitmq.client.AMQP;
 import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
