@@ -1,7 +1,6 @@
 package com.pkk.peakrabbitmq.web;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
 import com.pkk.peakrabbitmq.constand.PeakRabbitmqConstand;
 import com.pkk.peakrabbitmq.constand.TopicExchangeConstand;
 import com.pkk.peakrabbitmq.service.RabbitProductBusinessService;
@@ -35,10 +34,10 @@ public class RabbitmqWebController {
   @RequestMapping("send")
   public Object send(String e, String r, String obg, Boolean error) {
     if (StringUtils.isBlank(r)) {
-      r = TopicExchangeConstand.TOPIC_NAME_MASTER;
+      r = TopicExchangeConstand.TOPIC_CHANGE_MASTER;
     }
     if (StringUtils.isBlank(e)) {
-      e = TopicExchangeConstand.TOPIC_NAME_MASTER;
+      e = TopicExchangeConstand.TOPIC_CHANGE_MASTER;
     }
     if (null == error) {
       error = false;

@@ -1,9 +1,7 @@
 package com.pkk.peakrabbitmq.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pkk.peakrabbitmq.base.Message;
 import javax.annotation.Resource;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +26,8 @@ public class RabbitMqProduct {
    */
   public void send(String exchangeName, String routingKey, JSONObject msgJson) {
     CorrelationData correlationData = new CorrelationData(String.valueOf(System.currentTimeMillis()));
-    final Message message = new Message(msgJson.toJSONString());
-    rabbitTemplate.convertAndSend(exchangeName, routingKey, message, correlationData);
+    //final Message message = new Message(msgJson.toJSONString());
+    rabbitTemplate.convertAndSend(exchangeName, routingKey, msgJson, correlationData);
   }
 
 }

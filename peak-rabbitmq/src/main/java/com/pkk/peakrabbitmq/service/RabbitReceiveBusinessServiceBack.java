@@ -1,56 +1,47 @@
-package com.pkk.peakrabbitmq.base;
+package com.pkk.peakrabbitmq.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pkk.peakrabbitmq.base.AbstractRabbitReceive;
 import com.pkk.peakrabbitmq.constand.PeakRabbitmqConstand;
+import com.pkk.peakrabbitmq.constand.QueueConstand;
 import com.pkk.peakrabbitmq.constand.RoutingConstand;
 import com.pkk.peakrabbitmq.constand.TopicExchangeConstand;
 import com.pkk.peakrabbitmq.utils.RabbitMqUtil;
-import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import java.io.IOException;
 import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.messaging.handler.annotation.Headers;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.stereotype.Component;
 
 /**
- * @description: 消息处理类 延迟队列重试队列,参考[https://github.com/mylxsw/growing-up/blob/master/doc/RabbitMQ%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E5%AE%9E%E6%88%98-%E5%AE%9E%E7%8E%B0%E5%BB%B6%E6%97%B6%E9%87%8D%E8%AF%95%E9%98%9F%E5%88%97.md]
+ * @description: rabbit消息处理业务类
  * @author: peikunkun
- * @create: 2019-04-19 17:07
+ * @create: 2019-04-19 14:43
  **/
 @Slf4j
-public abstract class AbstractRabbitReceive {
+//@Component
+public class RabbitReceiveBusinessServiceBack {
+
 
   @Resource
   private RabbitTemplate rabbitTemplate;
 
-  /**
-   * @Description: 消息处理
-   * @Param: [obj]
-   * @return: void
-   * @Author: peikunkun
-   * @Date: 2019/4/19 0019 下午 5:17
-   */
-  @RabbitHandler(isDefault = true)
-  public void consumerHandle(Message message) {
+  //@RabbitListener(queues = QueueConstand.MASTER_QUEUE)
+  public void handleRetry(Message message, Channel channel) throws IOException {
     try {
-      final JSONObject msg = JSONObject.parseObject(new String(message.getBody(), PeakRabbitmqConstand.CHART_URF8));
       //消费者自己做幂等
-      /**
-       * 消息处理之前
-       */
-      JSONObject jsonObject = this.beforeHandle(msg);
+      final String messageStr = new String(message.getBody(), PeakRabbitmqConstand.CHART_URF8);
+      handle(JSONObject.parseObject(messageStr), message.getMessageProperties().getHeaders());
 
-      /**
-       *消息处理
-       */
-      this.handleMessage(msg, message.getMessageProperties().getHeaders());
-
-      /**
-       * 消息处理之后
-       */
-      this.afterHandle(jsonObject);
+      //手动抛出异常,测试消息重试
+      int i = 5 / 0;
     } catch (Exception e) {
       long retryCount = RabbitMqUtil.getRetryCount(message.getMessageProperties());
       CorrelationData correlationData = new CorrelationData(message.getMessageProperties().getCorrelationId());
@@ -74,8 +65,11 @@ public abstract class AbstractRabbitReceive {
           rabbitTemplate
               .convertAndSend(TopicExchangeConstand.TOPIC_CHANGE_RETRY, RoutingConstand.ROUTING_MASTER, newMessage,
                   correlationData);
-          log.info(
-              "用户服务消费者消费失败，消息发送到重试队列;" + "原始消息：" + new String(newMessage.getBody()) + ";第" + (retryCount + 1) + "次重试");
+          String baseMsg =
+              "基础消息:exchange:" + TopicExchangeConstand.TOPIC_CHANGE_RETRY + ",routingkey:"
+                  + RoutingConstand.ROUTING_MASTER + ",消息id:" + correlationData;
+          log.info("{" + baseMsg + "}\n" + "用户服务消费者消费失败，消息发送到重试队列;" + "原始消息：" + new String(newMessage.getBody()) + ";第"
+              + (retryCount + 1) + "次重试");
         } catch (Exception e1) {
           // 如果消息在重发的时候,出现了问题,可用nack,经过开发中的实际测试，当消息回滚到消息队列时，
           // 这条消息不会回到队列尾部，而是仍是在队列头部，这时消费者会立马又接收到这条消息，进行处理，接着抛出异常，
@@ -95,39 +89,33 @@ public abstract class AbstractRabbitReceive {
     }
   }
 
-
-  /**
-   * @Description: 消息处理
-   * @Param: [msg, headers]
-   * @return: void
-   * @Author: peikunkun
-   * @Date: 2019/4/24 0024 下午 3:11
-   */
-  protected abstract void handleMessage(JSONObject msg, Map<String, Object> headers);
-
-  /**
-   * 消息处理之后
-   *
-   * @param obj
-   */
-  protected void afterHandle(Object obj) {
-    log.info("消息处理结束--->" + JSONObject.toJSONString(obj));
-  }
-
-  /**
-   * 消息处理之前
-   *
-   * @param obj
-   */
-  protected JSONObject beforeHandle(Object obj) {
-    JSONObject jsonObject = new JSONObject();
-    if (null != obj) {
-      jsonObject = JSONObject.parseObject(JSONObject.toJSONString(obj));
+  //@RabbitListener(queues = QueueConstand.RETRY_QUEUE)
+  public void handleRetry(@Payload JSONObject obj, @Headers Map<String, Object> headers, Message message,
+      Channel channel) throws IOException {
+    try {
+      handle(obj, headers);
+    } catch (Exception e) {
+      throw e;
     }
-    log.info("消息开始处理--->[元]" + obj + " [宋]" + jsonObject);
-    return jsonObject;
   }
 
+  //@RabbitListener(queues = QueueConstand.FAILED_QUEUE)
+  public void handleField(@Payload JSONObject obj, @Headers Map<String, Object> headers) {
+    try {
+      handle(obj, headers);
+    } catch (Exception e) {
+      throw e;
+    }
+  }
+
+  //@RabbitListener(queues = "master")
+  protected void handleMessage(@Payload JSONObject obj, @Headers Map<String, Object> headers) {
+    try {
+      handle(obj, headers);
+    } catch (Exception e) {
+      throw e;
+    }
+  }
 
   /**
    * @Description: 消息处理
@@ -136,7 +124,7 @@ public abstract class AbstractRabbitReceive {
    * @Author: peikunkun
    * @Date: 2019/4/22 0022 下午 4:53
    */
-  protected void handle(JSONObject obj, Map<String, Object> headers) {
+  private void handle(JSONObject obj, Map<String, Object> headers) {
     error(obj, headers);
   }
 
@@ -147,9 +135,9 @@ public abstract class AbstractRabbitReceive {
    * @Author: peikunkun
    * @Date: 2019/4/22 0022 下午 4:26
    */
-  protected static void error(JSONObject obj, Map<String, Object> headers) {
+  private static void error(JSONObject obj, Map<String, Object> headers) {
     final boolean error = (Boolean) JSONObject.parseObject(obj.getString(PeakRabbitmqConstand.ERROR_OBJ_KEY))
-        .getOrDefault(PeakRabbitmqConstand.ERROR_KEY, false);
+        .getJSONObject(PeakRabbitmqConstand.ERROR_OBJ_KEY).getOrDefault(PeakRabbitmqConstand.ERROR_KEY, false);
     final String exchange = (String) headers.getOrDefault("amqp_receivedExchange", "未知交换器");
     final String routing = (String) headers.getOrDefault("amqp_receivedRoutingKey", "未知路由");
     final String msg =
@@ -160,5 +148,4 @@ public abstract class AbstractRabbitReceive {
       throw new RuntimeException("自定义错误:" + msg);
     }
   }
-
 }

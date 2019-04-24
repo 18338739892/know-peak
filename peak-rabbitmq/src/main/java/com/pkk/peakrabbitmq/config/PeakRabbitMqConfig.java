@@ -1,8 +1,8 @@
 package com.pkk.peakrabbitmq.config;
 
-import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_NAME_FAILED;
-import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_NAME_MASTER;
-import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_NAME_RETRY;
+import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_CHANGE_FAILED;
+import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_CHANGE_MASTER;
+import static com.pkk.peakrabbitmq.constand.TopicExchangeConstand.TOPIC_CHANGE_RETRY;
 
 import com.pkk.peakrabbitmq.constand.ExchangeConstand;
 import com.pkk.peakrabbitmq.constand.PeakRabbitmqConstand;
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Resource;
-import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -83,7 +82,7 @@ public class PeakRabbitMqConfig {
     // 【AcknowledgeMode.NONE：自动确认
     //AcknowledgeMode.AUTO：根据情况确认
     //AcknowledgeMode.MANUAL：手动确认】
-    factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+    //factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
     return factory;
   }
 
@@ -101,9 +100,9 @@ public class PeakRabbitMqConfig {
     //定义交换器
     //此处设置的exchange是持久化的，和消息无关系,消息只能在队列中进行持久化
     //[String exchange, String type, boolean durable]
-    channel.exchangeDeclare(TOPIC_NAME_MASTER, ExchangeConstand.TYPE_TOPIC, true);
-    channel.exchangeDeclare(TOPIC_NAME_RETRY, ExchangeConstand.TYPE_TOPIC, true);
-    channel.exchangeDeclare(TOPIC_NAME_FAILED, ExchangeConstand.TYPE_TOPIC, true);
+    channel.exchangeDeclare(TOPIC_CHANGE_MASTER, ExchangeConstand.TYPE_TOPIC, true);
+    channel.exchangeDeclare(TOPIC_CHANGE_RETRY, ExchangeConstand.TYPE_TOPIC, true);
+    channel.exchangeDeclare(TOPIC_CHANGE_FAILED, ExchangeConstand.TYPE_TOPIC, true);
 
     //定义队列
     //exclusive	false	排他，指定该选项为true则队列只对当前连接有效，连接断开后自动删除
@@ -117,22 +116,21 @@ public class PeakRabbitMqConfig {
      * 并且routing key指定为消费队列的名称，这样就可以实现消息只投递给原始出错时的队列，避免消息重新投递给所有关注当前routing key的消费者了。
      */
     Map<String, Object> retryArguments = new HashMap<String, Object>();
-    retryArguments.put(PeakRabbitmqConstand.DEAD_LETTER_EXCHANGE, TOPIC_NAME_MASTER);
-    retryArguments.put(PeakRabbitmqConstand.X_MESSAGE_TTL, 30 * 1000);//重试时间30秒
-    retryArguments.put(PeakRabbitmqConstand.DEAD_LETTER_ROUTING_KEY, TOPIC_NAME_MASTER);
+    retryArguments.put(PeakRabbitmqConstand.DEAD_LETTER_EXCHANGE, TOPIC_CHANGE_MASTER);
+    retryArguments.put(PeakRabbitmqConstand.X_MESSAGE_TTL, 5 * 1000);//重试时间5秒
+    retryArguments.put(PeakRabbitmqConstand.DEAD_LETTER_ROUTING_KEY, TOPIC_CHANGE_MASTER);
     channel.queueDeclare(QueueConstand.RETRY_QUEUE, true, false, false, retryArguments);
 
     //队列绑定
     // 绑定监听队列到Exchange
     //[queue,exchange,routingKey]
-    channel.queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_NAME_MASTER,
-        RoutingConstand.ROUTING_MASTER_ANY);
+    channel.queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_CHANGE_MASTER, RoutingConstand.ROUTING_MASTER_ANY);
     channel
-        .queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_NAME_MASTER, RoutingConstand.ROUTING_MASTER);
+        .queueBind(QueueConstand.MASTER_QUEUE, TopicExchangeConstand.TOPIC_CHANGE_MASTER, RoutingConstand.ROUTING_MASTER);
     channel
-        .queueBind(QueueConstand.FAILED_QUEUE, TopicExchangeConstand.TOPIC_NAME_FAILED, RoutingConstand.ROUTING_MASTER);
+        .queueBind(QueueConstand.FAILED_QUEUE, TopicExchangeConstand.TOPIC_CHANGE_FAILED, RoutingConstand.ROUTING_MASTER);
     channel
-        .queueBind(QueueConstand.RETRY_QUEUE, TopicExchangeConstand.TOPIC_NAME_RETRY, RoutingConstand.ROUTING_MASTER);
+        .queueBind(QueueConstand.RETRY_QUEUE, TopicExchangeConstand.TOPIC_CHANGE_RETRY, RoutingConstand.ROUTING_MASTER);
     return channel;
   }
 }

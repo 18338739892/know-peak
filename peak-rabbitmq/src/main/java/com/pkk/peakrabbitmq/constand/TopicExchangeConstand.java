@@ -13,18 +13,18 @@ public class TopicExchangeConstand {
   /**
    * change名称
    */
-  public static final String TOPIC_NAME_RETRY = "master.retry";
+  public static final String TOPIC_CHANGE_RETRY = "master.retry";
 
   /**
    * change名称
    */
-  public static final String TOPIC_NAME_FAILED = "master.failed";
+  public static final String TOPIC_CHANGE_FAILED = "master.failed";
 
 
   /**
    * change名称
    */
-  public static final String TOPIC_NAME_MASTER = "master";
+  public static final String TOPIC_CHANGE_MASTER = "master";
 
 
 }

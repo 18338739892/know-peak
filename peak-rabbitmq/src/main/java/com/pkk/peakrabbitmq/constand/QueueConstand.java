@@ -21,12 +21,12 @@ public class QueueConstand {
   /**
    * 队列失败的队列
    */
-  public static final String FAILED_QUEUE = TopicExchangeConstand.TOPIC_NAME_MASTER + FAILED_SUFFER;
+  public static final String FAILED_QUEUE = TopicExchangeConstand.TOPIC_CHANGE_MASTER + FAILED_SUFFER;
 
   /**
    * 队列重试的队列
    */
-  public static final String RETRY_QUEUE = TopicExchangeConstand.TOPIC_NAME_MASTER + RETRY_SUFFER;
+  public static final String RETRY_QUEUE = TopicExchangeConstand.TOPIC_CHANGE_MASTER + RETRY_SUFFER;
 
 
   /**

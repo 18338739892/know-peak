@@ -63,9 +63,6 @@
         
 [生产者与消费者](https://images2018.cnblogs.com/blog/1120165/201807/1120165-20180718210739808-323080287.png)
     
-    
-    
-    
 14. 扩展知识
     - @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE)这个是说在每次注入的时候回自动创建一个新的bean实例
       @Scope(value=ConfigurableBeanFactory.SCOPE_SINGLETON)单例模式，在整个应用中只能创建一个实例
@@ -95,7 +92,7 @@
     
     
     
-17. 配置模板暂存
+17. 配置模板暂存[相关文章](https://blog.csdn.net/charry_a/article/details/80514550)
 ```
     server.port=6006
     spring.application.name=springboot_rabbitmq
@@ -132,5 +129,38 @@
     java.rabbitmq.consumer.service.supply.retry.routingkey=material@supply
     #配置user监听信息
     java.rabbitmq.consumer.service.user.retry.routingkey=material@user
+```
+
+
+
+18. [队列的一些key的说明](https://blog.csdn.net/woaitingting1985/article/details/79087357)
+
+
+19. [延迟重试死信队列原理图](https://img2018.cnblogs.com/blog/280403/201812/280403-20181228144703203-538315024.png)
+    1. 生产者发布消息到主Exchange
+    2. 主Exchange根据Routing Key将消息分发到对应的消息队列
+    3. 多个消费者的worker进程同时对队列中的消息进行消费，因此它们之间采用“竞争”的方式来争取消息的消费
+    4. 消息消费后，不管成功失败，都要返回ACK消费确认消息给队列，避免消息消费确认机制导致重复投递，同时，如果消息处理成功，则结束流程，否则进入重试阶段
+    5. 如果重试次数小于设定的最大重试次数（默认为3次），则将消息重新投递到Retry Exchange的重试队列
+    6. 重试队列不需要消费者直接订阅，它会等待消息的有效时间过期之后，重新将消息投递给Dead Letter Exchange，我们在这里将其设置为主Exchange，实现延时后重新投递消息，这样消费者就可以重新消费消息
+    7. 如果三次以上都是消费失败，则认为消息无法被处理，直接将消息投递给Failed Exchange的Failed Queue，这时候应用可以触发报警机制，以通知相关责任人处理
+    8. 等待人工介入处理（解决bug）之后，重新将消息投递到主Exchange，这样就可以重新消费了
+    
+20. 基础配置示例
+```
+spring:
+  rabbitmq:
+    host: rabbit地址
+    port: 5673
+    username: guest
+    password: guest
+    virtual-host: /
+    listener:
+      simple:
+        retry:
+          max-attempts: 5 #最大重试次数
+          initial-interval: 1000ms #重试间隔时间（单位毫秒）
+          enabled: true #是否开启消费者重试（为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息）
+        default-requeue-rejected: false   #重试次数超过上面的设置之后是否丢弃（false不丢弃时需要写相应代码将该消息加入死信队列）
 ```
     
