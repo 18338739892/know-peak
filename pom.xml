@@ -9,8 +9,9 @@
   <version>1.0.0-SNAPSHOT</version>
   <modules>
     <module>dynamic-ds</module>
-      <module>dynamic-use</module>
+    <module>dynamic-use</module>
     <module>peak-rabbitmq</module>
+    <module>peak-small</module>
   </modules>
   <packaging>pom</packaging>
 
@@ -27,6 +28,94 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
   </properties>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+    </dependency>
+
+    <!--内部包-->
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-mybatis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-service</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-base</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-bootstrap</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-web</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-db</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-cache</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-log</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-exception</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-task</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-util</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-mq</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pkk</groupId>
+      <artifactId>components-devtools</artifactId>
+    </dependency>
+  </dependencies>
 
 
   <build>
