@@ -35,9 +35,10 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
     this.applicationContext = applicationContext;
   }
 
+
   @ApolloConfigChangeListener
   private void onChange(ConfigChangeEvent changeEvent) {
-    this.refreshProperties(applicationContext, changeEvent.changedKeys());
+    this.refreshProperties(changeEvent.changedKeys());
   }
 
 
@@ -48,7 +49,7 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
    * @Author: peikunkun
    * @Date: 2019/5/15 0015 下午 4:18
    */
-  protected void refreshProperties(ApplicationContext applicationContext, Set<String> changedKeys) {
+  protected void refreshProperties(Set<String> changedKeys) {
     log.info("Refreshing business log : {}", changedKeys);
     applicationContext.publishEvent(new EnvironmentChangeEvent(changedKeys));
 
@@ -63,7 +64,7 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
     refreshScope.refreshAll();
 
     //发送消息
-    this.pubilshDynamicPropertiesLog(applicationContext, changedKeys);
+    this.pubilshDynamicPropertiesLog(changedKeys);
   }
 
 
@@ -74,7 +75,7 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
    * @Author: peikunkun
    * @Date: 2019/5/15 0015 下午 4:21
    */
-  protected void pubilshDynamicPropertiesLog(ApplicationContext applicationContext, Set<String> changedKeys) {
+  protected void pubilshDynamicPropertiesLog(Set<String> changedKeys) {
     JSONObject jsonObject = new JSONObject();
     changedKeys.stream().forEach(c -> {
       jsonObject.put(c, applicationContext.getEnvironment().getProperty(c));
@@ -83,4 +84,6 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
     LoggerMessage log = new LoggerMessage(changedKeys == null ? "无配置修改,请确认!" : jsonObject.toJSONString());
     LoggerQueue.getInstance().push(log);
   }
+
+
 }
