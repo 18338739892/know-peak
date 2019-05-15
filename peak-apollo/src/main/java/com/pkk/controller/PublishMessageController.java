@@ -16,6 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("publish")
 public class PublishMessageController {
 
+  /**
+   * @Description: 发送消息
+   * @Param: [msg]
+   * @return: boolean
+   * @Author: peikunkun
+   * @Date: 2019/5/15 0015 下午 4:08
+   */
   @RequestMapping("publishMessage")
   public boolean publishMessage(String msg) {
     try {

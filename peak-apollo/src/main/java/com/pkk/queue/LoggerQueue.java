@@ -1,14 +1,17 @@
 package com.pkk.queue;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pkk.message.LoggerMessage;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @description: 日志队列
  * @author: peikunkun
  * @create: 2019-05-15 11:03
  **/
+@Slf4j
 public class LoggerQueue {
 
   //队列大小
@@ -27,11 +30,12 @@ public class LoggerQueue {
   /**
    * 消息入队
    *
-   * @param log
+   * @param loggerMessage
    * @return
    */
-  public boolean push(LoggerMessage log) {
-    return this.blockingQueue.add(log);//队列满了就抛出异常，不阻塞
+  public boolean push(LoggerMessage loggerMessage) {
+    log.info("发送消息:" + JSONObject.toJSONString(loggerMessage));
+    return this.blockingQueue.add(loggerMessage);//队列满了就抛出异常，不阻塞
   }
 
   /**
