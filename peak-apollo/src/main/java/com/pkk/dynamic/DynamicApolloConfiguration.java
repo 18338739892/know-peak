@@ -3,6 +3,7 @@ package com.pkk.dynamic;
 import com.alibaba.fastjson.JSONObject;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfigChangeListener;
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import com.pkk.message.LoggerMessage;
 import com.pkk.queue.LoggerQueue;
 import java.util.Set;
@@ -13,6 +14,8 @@ import org.springframework.cloud.context.environment.EnvironmentChangeEvent;
 import org.springframework.cloud.context.scope.refresh.RefreshScope;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +24,8 @@ import org.springframework.stereotype.Component;
  * @create: 2019-05-15 16:14
  **/
 @Slf4j
-@Component
+@Configuration
+@EnableApolloConfig
 public class DynamicApolloConfiguration implements ApplicationContextAware {
 
 
