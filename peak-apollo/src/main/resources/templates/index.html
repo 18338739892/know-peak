@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>日志展示</title>
+  <!--<script src="/webjars/layui/0.0.1/dist/layui.js"></script>-->
+  <!--<link rel="stylesheet" type="text/css" href="http://layui.hcwl520.com.cn/layui/css/layui.css?v=201801090202" />-->
+  <link rel="stylesheet" href="../css/layui.css">
+  <!--<script src="../js/jquery-1.10.2.js"></script>-->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <!--<script src="../js/layui.js"></script>-->
+  <script src="../layui/layui.all.js"></script>
+
+  <!--socket-->
+  <script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+  <script src="https://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h1 style="text-align: center;color: #2D93CA">查看实时日志</h1>
+<div style="padding-left: 0px;padding-top: 0px">
+  <div class="layui-form-item">
+    <div class="layui-input-inline">
+      <input id="message" type="text" name="input" placeholder="请输入要发送的消息" autocomplete="off" class="layui-input">
+    </div>
+    <button style="float: left;" id="send" lay-filter="send" type="button" class="layui-btn">发送</button>
+  </div>
+</div>
+<div>
+  是否监听:
+  <input type="radio" name="listener" class="layui-form-radioed" checked onchange="openSocket()" aria-selected="true"
+         title="开启监听">开启监听
+  <input type="radio" name="listener" class="layui-form-radio" onchange="closeSocket()" title="关闭监听">关闭监听
+</div>
+<form class="layui-form">
+  <!--<button style="text-align: center;color: #01AAED" id="log" name="log" type="button">查看日志</button>-->
+  <div id="log-container" style="height: 450px; overflow-y: scroll; background: #333; color: #aaa; padding: 10px;">
+    <div></div>
+  </div>
+</form>
+<script>
+  /*$("#log").click(function () {
+    //iframe层
+    layer.open({
+      type: 1,
+      title: '<span class="laytit">接口实时日志</span>',
+      shadeClose: false,
+      shade: 0.7,
+      maxmin: true,
+      area: ['80%', '70%'],
+      content: $("#logdiv").html(), //iframe的url
+      cancel: function (index) {
+        closeSocket();
+      }
+    });
+  });*/
+  $(document).ready(function () {
+    $("#send").click(function () {
+      $.ajax({
+        url: "/publish/publishMessage",
+        contentType: 'application/json;charset=utf-8',
+        data: {msg: $("#message").val()},
+        success: function (result) {
+          //$("#log-container div").after("<span>发送消息成功</span><br/>");
+        }
+      });
+    });
+  });
+
+  <!-- 日志实时推送业务处理 -->
+  var stompClient = null;
+
+  $(document).ready(function () {
+    openSocket();
+  });
+
+  function openSocket() {
+    if (stompClient == null) {
+      if ($("#log-container").find("span").length == 0) {
+        $("#log-container div").after("<span>通道连接成功,静默等待.....</span>");
+      }
+      var socket = new SockJS('websocket?token=kl');
+      stompClient = Stomp.over(socket);
+      stompClient.connect({token: "kl"}, function (frame) {
+        stompClient.subscribe('/topic/pullLogger', function (event) {
+          var content = JSON.parse(event.body);
+          /*var leverhtml = '<span class="infotext">' + content.level + '</span>';*/
+          $("#log-container div").append("<p class='logp'>" + content.timestamp + "  ：" + content.body + "</p>");
+          $("#log-container").scrollTop($("#log-container div").height() - $("#log-container").height());
+        }, {
+          token: "kltoen"
+        });
+      });
+    }
+  }
+
+  function closeSocket() {
+    if (stompClient != null) {
+      stompClient.disconnect();
+      stompClient = null;
+      if ($("#log-container").find("span").length == 0) {
+        $("#log-container div").after("<span>通道连接关闭成功^-^</span>");
+      }
+    }
+  }
+</script>
+</body>
+</html>

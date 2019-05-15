@@ -12,6 +12,7 @@
     <module>dynamic-use</module>
     <module>peak-rabbitmq</module>
     <module>peak-small</module>
+    <module>peak-apollo</module>
   </modules>
   <packaging>pom</packaging>
 
