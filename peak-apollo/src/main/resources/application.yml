@@ -8,6 +8,6 @@ app:
 apollo:
   bootstrap:
     enable: true
-  meta: http://localhost:8080
+  meta: http://118.25.123.16:18080
 
 
