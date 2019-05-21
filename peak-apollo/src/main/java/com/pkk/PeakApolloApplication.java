@@ -18,6 +18,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 public class PeakApolloApplication {
 
   public static void main(String[] args) {
+    System.out.println("官方实现案例:https://github.com/ctripcorp/apollo-use-cases");
     SpringApplication.run(PeakApolloApplication.class, args);
   }
 
