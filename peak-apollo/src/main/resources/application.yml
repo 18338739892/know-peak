@@ -4,10 +4,23 @@ spring:
 
 app:
   id: ${spring.application.name}
-
+#apollo.bootstrap.enabled：在应用启动阶段，向Spring容器注入被托管的application.properties文件的配置信息
+#这里和porto里面都是使用的是18080不是eureka的地址
 apollo:
+  meta: http://localhost:18080
   bootstrap:
     enable: true
-  meta: http://118.25.123.16:18080
+  eagerLoad:
+    enabled: true
+
+
+
+
+#apollo.bootstrap.eagerLoad.enabled：将Apollo配置加载提到初始化日志系统之前。
+logging:
+  level:
+    com:
+      pkk: debug
+
 
 

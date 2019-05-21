@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import com.ctrip.framework.apollo.spring.annotation.ApolloConfigChangeListener;
 import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
+import com.pkk.apollo.util.PeakApolloUtil;
 import com.pkk.message.LoggerMessage;
 import com.pkk.queue.LoggerQueue;
 import java.util.Set;
@@ -24,12 +25,9 @@ import org.springframework.stereotype.Component;
  * @create: 2019-05-15 16:14
  **/
 @Slf4j
-@Configuration
-@EnableApolloConfig
+//@Configuration
 public class DynamicApolloConfiguration implements ApplicationContextAware {
 
-
-  @Autowired
   private ApplicationContext applicationContext;
   @Autowired
   private RefreshScope refreshScope;
@@ -40,7 +38,7 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
   }
 
 
-  @ApolloConfigChangeListener
+  @ApolloConfigChangeListener(value = "application")
   private void onChange(ConfigChangeEvent changeEvent) {
     this.refreshProperties(changeEvent.changedKeys());
   }
@@ -54,7 +52,6 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
    * @Date: 2019/5/15 0015 下午 4:18
    */
   protected void refreshProperties(Set<String> changedKeys) {
-    log.info("Refreshing business log : {}", changedKeys);
     applicationContext.publishEvent(new EnvironmentChangeEvent(changedKeys));
 
     /*最后一个问题，@RefreshScope作用的类，不能是final类，否则启动时会报错
@@ -68,26 +65,7 @@ public class DynamicApolloConfiguration implements ApplicationContextAware {
     refreshScope.refreshAll();
 
     //发送消息
-    this.pubilshDynamicPropertiesLog(changedKeys);
+    PeakApolloUtil.pubilshDynamicPropertiesLog(applicationContext, changedKeys);
   }
-
-
-  /**
-   * @Description: 改变的消息
-   * @Param: [changedKeys]
-   * @return: void
-   * @Author: peikunkun
-   * @Date: 2019/5/15 0015 下午 4:21
-   */
-  protected void pubilshDynamicPropertiesLog(Set<String> changedKeys) {
-    JSONObject jsonObject = new JSONObject();
-    changedKeys.stream().forEach(c -> {
-      jsonObject.put(c, applicationContext.getEnvironment().getProperty(c));
-    });
-    log.info("信息:" + jsonObject.toJSONString());
-    LoggerMessage log = new LoggerMessage(changedKeys == null ? "无配置修改,请确认!" : jsonObject.toJSONString());
-    LoggerQueue.getInstance().push(log);
-  }
-
 
 }
