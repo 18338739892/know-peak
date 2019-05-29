@@ -28,6 +28,9 @@ public class LoggerApolloConfiguration {
    */
   private static final String LOGGER_TAG = "logging.level.";
 
+  /**
+   * 指定获取那个nameSpace配置
+   */
   @ApolloConfig("application")
   private Config config;
   @Resource
