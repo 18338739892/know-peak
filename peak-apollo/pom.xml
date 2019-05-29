@@ -44,7 +44,7 @@
 
 
   <!--动态指定apollo的eureka-->
-  <profiles>
+  <!--<profiles>
     <profile>
       <id>local</id>
       <activation>
@@ -72,5 +72,5 @@
         </apollo.meta.service>
       </properties>
     </profile>
-  </profiles>
+  </profiles>-->
 </project>
