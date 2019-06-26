@@ -8,7 +8,6 @@
   <artifactId>know-peak</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <modules>
-    <module>dynamic-ds</module>
     <module>dynamic-use</module>
     <module>peak-rabbitmq</module>
     <module>peak-small</module>

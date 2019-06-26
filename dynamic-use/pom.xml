@@ -57,7 +57,7 @@
     </dependency>
     <dependency>
       <groupId>com.pkk</groupId>
-      <artifactId>dynamic-ds</artifactId>
+      <artifactId>penguin-support-dynamic-datasource</artifactId>
       <version>1.0.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>

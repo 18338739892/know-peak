@@ -7,10 +7,10 @@ spring:
     port: 6379
     password: k7lla2rL7qdR9vP2
   rabbitmq:
-    host: 117.143.217.94
+    host: 118.25.123.16
     port: 5672
-    username: rabbit
-    password: rabbit@admin
+    username: root
+    password: admin
   datasource:
     hikari:
       jdbc-url: jdbc:mysql://118.25.123.16:3306/dynamic-ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
