@@ -1,5 +1,6 @@
 package com.pkk;
 
+import com.pkk.penguin.support.dynamic.datasource.EnableDynamicDB;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  **/
 @SpringBootApplication
 @MapperScan(basePackages = "com.pkk.*.*.dao")
+@EnableDynamicDB
 public class DynamicDSApplication extends SpringBootServletInitializer {
 
   public static void main(String[] args) {

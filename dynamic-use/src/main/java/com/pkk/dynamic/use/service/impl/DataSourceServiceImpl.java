@@ -1,10 +1,11 @@
 package com.pkk.dynamic.use.service.impl;
 
-import com.pkk.database.annotation.ActivateDataSource;
 import com.pkk.dynamic.use.dao.DataSourceDAO;
 import com.pkk.dynamic.use.entity.DataSource;
 import com.pkk.dynamic.use.service.DataSourceService;
 import com.pkk.dynamic.use.vo.DataSourceChangeReqVo;
+import com.pkk.penguin.support.dynamic.datasource.annotation.ActivateDataSource;
+import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.util.List;
 public class DataSourceServiceImpl implements DataSourceService {
 
 
-  @Autowired
+  @Resource
   private DataSourceDAO dataSourceDAO;
 
   @Override
