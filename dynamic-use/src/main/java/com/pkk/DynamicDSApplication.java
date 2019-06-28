@@ -17,7 +17,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 @MapperScan(basePackages = "com.pkk.*.*.dao")
 @EnableDynamicDB
-public class DynamicDSApplication extends SpringBootServletInitializer {
+public class DynamicDSApplication{
 
   public static void main(String[] args) {
     SpringApplication.run(DynamicDSApplication.class, args);
@@ -29,10 +29,10 @@ public class DynamicDSApplication extends SpringBootServletInitializer {
    * @param builder
    * @return
    */
-  @Override
+  /*@Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
     return builder.sources(DynamicDSApplication.class);
-  }
+  }*/
 
 
 }

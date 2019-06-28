@@ -13,8 +13,8 @@ spring:
     password: admin
   datasource:
     hikari:
-      #jdbc-url: jdbc:mysql://127.0.0.1:5555/dynamic_ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
-      jdbc-url: jdbc:mysql://118.25.123.16:3306/dynamic_ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      #jdbc-url: jdbc:mysql://118.25.123.16:3306/dynamic_ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+      jdbc-url: jdbc:mysql://localhost:3306/dynamic_ds?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
       username: kunzai
       password: FFgL5O9HCe6PK!RE
       connection-timeout: 60000
@@ -53,4 +53,3 @@ logging:
   level.java.sql.Connection: debug
   level.java.sql.Statement: debug
   level.java.sql.PreparedStatement: debug
-
